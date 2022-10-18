@@ -2,14 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import { NativeBaseProvider, Text, VStack, Box, Stack } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import MainView from './src/screens/MainView';
+import Colors from './src/shared/Colors';
 
 export default function App() {
   return (
 
     <NativeBaseProvider>
-      <Stack backgroundColor={'amber.100'} w={'100%'} h={'100%'}>
+      <Stack backgroundColor={Colors.secoundaryLight} flex={1}>
         <MainView />
-        {/* <Text>aaaa</Text> */}
         <StatusBar style="auto" />
       </Stack>
     </NativeBaseProvider>

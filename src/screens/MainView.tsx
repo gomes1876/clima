@@ -1,35 +1,54 @@
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 
-import { View, Text, HStack, VStack, Box } from 'native-base';
+import { View, Text, HStack, VStack, Box, Spinner, FlatList } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
-import { getInfoLocal } from '../connections/getInfo';
+import { get5Days, getInfoLocal } from '../connections/getInfo';
 import { SelectIcon } from '../shared/functions';
 import { Fontisto } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
+
+import Colors from '../shared/Colors';
+import Card from '../components/Card';
+import { Dimensions } from 'react-native';
+import WeekItem from '../components/WeekItem';
+
+const { width } = Dimensions.get('window');
 
 export default function MainView() {
-    const [data, setData] = useState({});
+    const [data, setData] = useState(null);
     const [weather, setWeather] = useState([]);
     const [location, setLocation] = useState(null);
-
+    const [arrWeek, setArrWeek] = useState([])
 
     const init = async () => {
-
 
         let { status } = await Location.requestForegroundPermissionsAsync();
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
+
         const { latitude, longitude } = location?.coords;
 
-        const res = await getInfoLocal(latitude, longitude);
-        setData(res);
-        // console.log(res);
+        const dayInfo = await getInfoLocal(latitude, longitude);
+        setData(dayInfo);
+        setWeather(dayInfo?.weather[0]);
 
-        setWeather(res?.weather[0]);
+        const weekInfo = await get5Days(latitude, longitude);
+        let dataAtual = parseInt((new Date()).toString().substring(8, 10));
 
+        weekInfo?.data?.list.map((e) => {
+            let day = parseInt(e?.dt_txt.substring(8, 11));
+            if (dataAtual < day) {
+                dataAtual = day;
+                if (arrWeek.length < 5) {
+                    setArrWeek(arr => arr.concat(e));
+                }
+            }
+        }
+        );
     }
 
     useEffect(() => {
@@ -39,29 +58,45 @@ export default function MainView() {
     }, []);
 
     return (
-        <HStack alignItems="center" justifyContent={'center'} >
-            {data != undefined &&
-                <VStack justifyContent={'center'} alignItems="center" >
-                    <Text fontSize={'7xl'} fontWeight={'semibold'} color={'orange.400'} mt={'2/6'}>{parseInt(data?.main?.temp)}°</Text>
-                    {data != undefined ? (<SelectIcon info={data} />) : null}
+        <HStack alignItems="center" justifyContent={'center'} flex={1}>
+            {data != undefined ?
 
-                    <Text fontSize={'md'} mt={1} mb={1} fontWeight={'normal'} color={'orange.400'}>{weather?.description}</Text>
+                <VStack justifyContent={'space-between'}>
+                    <VStack alignItems="center" >
+                        <Text fontSize={'7xl'} fontWeight={'semibold'} color={Colors.mainLight} mt={'2/6'}>{parseInt(data?.main?.temp)}°</Text>
+                        <SelectIcon info={data} />
 
-                    <Text fontSize={'2xl'} fontWeight={'medium'} color={'orange.400'}>{data?.name}</Text>
-                    <Text fontSize={'md'} fontWeight={'light'} color={'orange.400'}>{data?.sys?.country}</Text>
+                        <Text fontSize={'md'} mt={1} mb={1} fontWeight={'normal'} color={Colors.mainLight}>{weather?.description}</Text>
+                        <Text fontSize={'2xl'} fontWeight={'medium'} color={Colors.mainLight}>{data?.name}</Text>
+                        <Text fontSize={'md'} fontWeight={'light'} color={Colors.mainLight}>{data?.sys?.country}</Text>
 
-                    <HStack justifyContent={'center'} h={'20%'} mt={'6'}>
-                        <Box backgroundColor={'orange.400'} paddingX={'8'} w={'2/5'} paddingTop={'10'} paddingBottom={'8'} borderRadius={'md'} justifyContent={'center'}>
-                            <Fontisto style={{ alignSelf: 'center' }} name="wind" size={40} color={'#fef3c7'} />
-                            <Text alignSelf={'center'} mt={'4'} color={'#fef3c7'} fontSize={'md'} fontWeight={'bold'}>{data?.wind?.speed} m/s</Text>
-                        </Box>
+                        <HStack justifyContent={'center'} h={'20%'} mt={'6'}>
+                            <Card icon={<Fontisto style={{ alignSelf: 'center' }} name="wind" size={40} color={Colors.secoundaryLight} />} text={`${data?.wind?.speed} m /s`} />
+                            <Card ml={'4'} icon={<MaterialCommunityIcons name="water" size={50} color={Colors.secoundaryLight} style={{ alignSelf: 'center', }} />} text={`${data?.main?.humidity}%`} />
+                        </HStack>
 
-                        <Box backgroundColor={'orange.400'} paddingX={'8'} w={'2/5'} paddingTop={'4'} borderRadius={'md'} ml={'6'} >
-                            <MaterialCommunityIcons name="water" size={60} color={'#fef3c7'} style={{ alignSelf: 'center' }} />
-                            <Text alignSelf={'center'} mt={'3'} color={'#fef3c7'} fontSize={'md'} fontWeight={'bold'}>{data?.main?.humidity}%</Text>
-                        </Box>
-                    </HStack>
-                </VStack>}
+                    </VStack>
+
+
+                    <VStack>
+                        <Text ml={'4'} fontSize={'2xl'} fontWeight={'bold'} color={Colors.mainLight}>Previsão dos próximos dias:</Text>
+                        <FlatList
+                            snapToAlignment='start'
+                            scrollEventThrottle={16}
+                            snapToOffsets={[...Array(arrWeek.length)].map((val, index) => index * (width * 0.7 - 8) + (index - 1) * 8)}
+                            decelerationRate={'fast'}
+                            showsHorizontalScrollIndicator={false}
+                            horizontal={true}
+                            data={arrWeek}
+                            mt={'2'}
+                            renderItem={({
+                                item
+                            }) => {
+                                return (<WeekItem item={item} />);
+                            }} />
+                    </VStack>
+                </VStack>
+                : <Spinner color={Colors.mainDark} />}
         </HStack >
     );
 }

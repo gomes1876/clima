@@ -21,39 +21,40 @@ export function SelectIcon(info) {
         if (info?.info?.weather != undefined) {
             if (info?.info?.weather.length > 0) {
                 icon = info?.info?.weather[0]?.icon
+                console.log(icon);
 
             }
 
         }
     }
 
-    if (icon == "01d") {
+    if (icon.includes("01")) {
         return (<><Ionicons name="md-sunny" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "02d") {
+    else if (icon.includes("02")) {
         return (<><Fontisto name="day-cloudy" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "03d") {
+    else if (icon.includes("03")) {
         return (<><Fontisto name="cloudy" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "04d") {
+    else if (icon.includes("04")) {
         return (<>
             <Ionicons name="cloud" mb={0} size={80} color={'#fb923c'} />);
         </>)
     }
-    else if (icon == "09d") {
+    else if (icon.includes("09")) {
         return (<><Ionicons name="rainy-sharp" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "10d") {
+    else if (icon.includes("10")) {
         return (<><FontAwesome5 name="cloud-sun-rain" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "11d") {
+    else if (icon.includes("11")) {
         return (<><Feather name="cloud-lightning" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "13d") {
+    else if (icon.includes("13")) {
         return (<><FontAwesome name="snowflake-o" mb={0} size={80} color={'#fb923c'} /></>);
     }
-    else if (icon == "50d") {
+    else if (icon.includes("50")) {
         return (<><Ionicons name="md-cloud-sharp" mb={0} size={80} color={'#fb923c'} /></>);
     }
 
