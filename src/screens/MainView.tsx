@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 
-import { View, Text, HStack, VStack, Box, Spinner, FlatList } from 'native-base';
+import { Text, HStack, VStack, Spinner, FlatList } from 'native-base';
 
-import { Ionicons } from '@expo/vector-icons';
 import { get5Days, getInfoLocal } from '../connections/getInfo';
 import { SelectIcon } from '../shared/functions';
 import { Fontisto } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 
 
 import Colors from '../shared/Colors';
@@ -23,20 +21,25 @@ export default function MainView() {
     const [weather, setWeather] = useState([]);
     const [location, setLocation] = useState(null);
     const [arrWeek, setArrWeek] = useState([])
+    const [latitudeLocal, setLatitudeLocal] = useState(0);
+    const [longitudeLocal, setLongitudeLocal] = useState(0);
 
-    const init = async () => {
-
+    const getLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
 
         const { latitude, longitude } = location?.coords;
+        setLongitudeLocal(longitude);
+        setLatitudeLocal(latitude);
+    }
 
-        const dayInfo = await getInfoLocal(latitude, longitude);
+    const getDataInfo = async () => {
+        const dayInfo = await getInfoLocal(latitudeLocal, longitudeLocal);
         setData(dayInfo);
         setWeather(dayInfo?.weather[0]);
 
-        const weekInfo = await get5Days(latitude, longitude);
+        const weekInfo = await get5Days(latitudeLocal, longitudeLocal);
         let dataAtual = parseInt((new Date()).toString().substring(8, 10));
 
         weekInfo?.data?.list.map((e) => {
@@ -51,10 +54,13 @@ export default function MainView() {
         );
     }
 
+    const init = async () => {
+        await getLocation();
+        await getDataInfo();
+    }
+
     useEffect(() => {
-
         init();
-
     }, []);
 
     return (
@@ -95,8 +101,10 @@ export default function MainView() {
                                 return (<WeekItem item={item} />);
                             }} />
                     </VStack>
+
                 </VStack>
-                : <Spinner color={Colors.mainDark} />}
+                :
+                <Spinner size={'lg'} color={Colors.mainDark} />}
         </HStack >
     );
 }
