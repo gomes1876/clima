@@ -1,12 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NativeBaseProvider, Text, VStack, Box, Stack } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import MainView from './src/screens/MainView';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+
+    <NativeBaseProvider>
+      <Stack backgroundColor={'amber.100'} w={'100%'} h={'100%'}>
+        <MainView />
+        {/* <Text>aaaa</Text> */}
+        <StatusBar style="auto" />
+      </Stack>
+    </NativeBaseProvider>
   );
 }
 
