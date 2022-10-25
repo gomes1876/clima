@@ -29,32 +29,47 @@ export function SelectIcon(info) {
     }
 
     if (icon.includes("01")) {
+        //console.log("01");
+
         return (<><Ionicons name="md-sunny" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("02")) {
+        //console.log("02");
         return (<><Fontisto name="day-cloudy" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("03")) {
+        //console.log("03");
         return (<><Fontisto name="cloudy" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("04")) {
+        //console.log("04");
         return (<>
             <Ionicons name="cloud" mb={0} size={80} color={Colors.mainLight} />
         </>);
     }
     else if (icon.includes("09")) {
+
+        //console.log("09");
         return (<><Ionicons name="rainy-sharp" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("10")) {
+
+        //console.log("10");
         return (<><FontAwesome5 name="cloud-sun-rain" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("11")) {
+
+        //console.log("11");
         return (<><Feather name="cloud-lightning" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("13")) {
+
+        //console.log("13");
         return (<><FontAwesome name="snowflake-o" mb={0} size={80} color={Colors.mainLight} /></>);
     }
     else if (icon.includes("50")) {
+
+        //console.log("50");
         return (<><Ionicons name="md-cloud-sharp" mb={0} size={80} color={Colors.mainLight} /></>);
     }
 

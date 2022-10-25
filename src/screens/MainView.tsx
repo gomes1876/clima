@@ -31,10 +31,11 @@ export default function MainView() {
             setErrorMsg('Permission to access location was denied');
             return;
         }
-        let this_location: SetStateAction<any> = await Location.getCurrentPositionAsync({});
+        let this_location = await Location.getCurrentPositionAsync({});
         setLocation(this_location);
+        //console.log(location);
 
-        const { latitude, longitude } = location?.coords;
+        const { latitude, longitude } = this_location?.coords;
         setLongitudeLocal(longitude);
         setLatitudeLocal(latitude);
     }
@@ -67,7 +68,7 @@ export default function MainView() {
 
     useEffect(() => {
         init();
-    }, []);
+    }, [location]);
 
     return (
         <HStack alignItems="center" justifyContent={'center'} flex={1}>
