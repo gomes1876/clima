@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 
 import { Text, HStack, VStack, Spinner, FlatList } from 'native-base';
@@ -23,16 +23,22 @@ export default function MainView() {
     const [arrWeek, setArrWeek] = useState([])
     const [latitudeLocal, setLatitudeLocal] = useState(0);
     const [longitudeLocal, setLongitudeLocal] = useState(0);
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const getLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+        }
+        let this_location: SetStateAction<any> = await Location.getCurrentPositionAsync({});
+        setLocation(this_location);
 
         const { latitude, longitude } = location?.coords;
         setLongitudeLocal(longitude);
         setLatitudeLocal(latitude);
     }
+
 
     const getDataInfo = async () => {
         const dayInfo = await getInfoLocal(latitudeLocal, longitudeLocal);

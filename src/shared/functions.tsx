@@ -39,8 +39,8 @@ export function SelectIcon(info) {
     }
     else if (icon.includes("04")) {
         return (<>
-            <Ionicons name="cloud" mb={0} size={80} color={Colors.mainLight} />);
-        </>)
+            <Ionicons name="cloud" mb={0} size={80} color={Colors.mainLight} />
+        </>);
     }
     else if (icon.includes("09")) {
         return (<><Ionicons name="rainy-sharp" mb={0} size={80} color={Colors.mainLight} /></>);
