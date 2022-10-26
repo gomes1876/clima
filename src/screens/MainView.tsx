@@ -76,7 +76,7 @@ export default function MainView() {
 
                 <VStack justifyContent={'space-between'}>
                     <VStack alignItems="center" >
-                        <Text fontSize={'7xl'} fontWeight={'semibold'} color={Colors.mainLight} mt={'2/6'}>{parseInt(data?.main?.temp)}°</Text>
+                        <Text fontSize={'7xl'} fontWeight={'semibold'} color={Colors.mainLight} mt={'12'}>{parseInt(data?.main?.temp)}°</Text>
                         <SelectIcon info={data} />
 
                         <Text fontSize={'md'} mt={1} mb={1} fontWeight={'normal'} color={Colors.mainLight}>{weather?.description}</Text>
