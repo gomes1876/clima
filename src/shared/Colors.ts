@@ -1,8 +1,8 @@
 const Colors = {
     mainLight: '#fb923c',
-    mainDark: '',
+    mainDark: '#BAE6FD',
     secoundaryLight: '#fef3c7',
-    secoundaryDark: '',
+    secoundaryDark: '#075985',
 }
 
 export default Colors;

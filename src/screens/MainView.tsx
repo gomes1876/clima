@@ -102,9 +102,11 @@ export default function MainView() {
                             horizontal={true}
                             data={arrWeek}
                             mt={'2'}
+                            len
                             renderItem={({
-                                item
+                                item, index
                             }) => {
+                                if (index < 5)
                                 return (<WeekItem item={item} />);
                             }} />
                     </VStack>
